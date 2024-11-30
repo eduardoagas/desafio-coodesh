@@ -40,6 +40,6 @@ class UserRepository
     {
         $query = WordHistory::where('user_id', $userId)->orderBy('accessed_at', 'desc');
 
-        return $this->paginationService->paginateWithCursor($query, $limit, $cursor, 'accessed_at', null);
+        return $this->paginationService->paginateWithCursor($query, $limit, $cursor, 'accessed_at', $query->count());
     }
 }

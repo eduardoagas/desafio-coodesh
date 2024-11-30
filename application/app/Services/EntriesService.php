@@ -19,6 +19,6 @@ class EntriesService
         $cursor = $params['cursor'] ?? null;
         $limit = $params['limit'] ?? 10;
 
-        return $this->entriesRepository->paginateWithCursor($search, $cursor, $limit);
+        return $this->entriesRepository->paginateWithCursor($search, $cursor, $limit, 'id', $limit);
     }
 }

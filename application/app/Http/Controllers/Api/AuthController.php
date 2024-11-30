@@ -22,7 +22,7 @@ class AuthController extends Controller
     }
     public function signup(SignupRequest $request){
 
-        $user = $this->userService->create($request->validated());
+        $user = $this->userService->create($request);
 
         $token = $user->createToken('DictioToken')->accessToken;
 
@@ -30,7 +30,7 @@ class AuthController extends Controller
             'id' => $user->id,
             'name' => $user->name,
             'token' => 'Bearer ' . $token,
-        ]);
+        ], 200);
     }
 
     public function signin(SigninRequest $request)
@@ -43,7 +43,7 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'token' => 'Bearer ' . $token,
-            ]);
+            ], 200);
         }
     }
 

@@ -2,13 +2,11 @@
 
 namespace App\Services;
 
-use App\Models\User;
-use App\Models\DictionaryEntry;
 use App\Repositories\FavoriteRepository;
 
 class FavoriteService
 {
-    protected $repository;
+    protected FavoriteRepository $repository;
 
     public function __construct(FavoriteRepository $repository)
     {
@@ -25,8 +23,10 @@ class FavoriteService
         return $this->repository->removeFavorite($word) > 0;
     }
 
-    public function getFavoritesWithPagination(int $limit, ?string $cursor): array
+    public function getFavorites(array $params): array
     {
-        return $this->repository->getFavoritesWithPagination($limit, $cursor);
+        $cursor = $params['cursor'] ?? null;
+        $limit = $params['limit'] ?? 10;
+        return $this->repository->getFavorites($limit, $cursor);
     }
 }

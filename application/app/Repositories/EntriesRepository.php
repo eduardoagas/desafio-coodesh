@@ -24,6 +24,6 @@ class EntriesRepository
 
         $totalDocs = DictionaryEntry::count();
 
-        return $this->paginationService->paginateWithCursor($query, $limit, $cursor, $totalDocs);
+        return $this->paginationService->paginateWithCursor($query, $limit, $cursor, 'id', $totalDocs);
     }
 }

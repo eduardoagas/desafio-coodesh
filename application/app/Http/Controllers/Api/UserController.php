@@ -19,8 +19,9 @@ class UserController extends Controller
 
     public function getProfile(Request $request)
     {
+        
         $user = $this->userService->getUserProfile(Auth::id());
-
+        
         return response()->json([
             'id' => $user->id,
             'name' => $user->name,
@@ -33,8 +34,8 @@ class UserController extends Controller
         $limit = $request->query('limit', 10);
         $cursor = $request->query('cursor');
 
-        $history = $this->userService->getUserWordHistory(Auth::id(), $limit, $cursor);
+        $data = $this->userService->getUserWordHistory(Auth::id(), $limit, $cursor);
 
-        return response()->json($history);
+        return response()->json([$data], 200);
     }
 }

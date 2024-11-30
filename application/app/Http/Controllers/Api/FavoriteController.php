@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use App\Models\DictionaryEntry;
 use App\Services\FavoriteService;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\FavoritesRequest;
 
 class FavoriteController extends Controller
 {
-    protected $service;
+    protected FavoriteService $service;
 
     public function __construct(FavoriteService $service)
     {
@@ -21,7 +20,7 @@ class FavoriteController extends Controller
     public function addFavorite(Request $request, string $word)
     {
         if ($this->service->addFavorite($word)) {
-            return response()->json(null, 200);
+            return response()->json(null, 204);
         }
 
         return response()->json(['message' => 'Unable to add favorite'], 400);
@@ -36,13 +35,10 @@ class FavoriteController extends Controller
         return response()->json(['message' => 'Unable to remove favorite'], 400);
     }
 
-    public function getFavorites(Request $request)
+    public function getFavorites(FavoritesRequest $request)
     {
-        $limit = $request->query('limit', 10);
-        $cursor = $request->query('cursor');
+        $data = $this->service->getFavorites($request->validated());
 
-        $favorites = $this->service->getFavoritesWithPagination($limit, $cursor);
-
-        return response()->json($favorites);
+        return response()->json([$data], 200);
     }
 }

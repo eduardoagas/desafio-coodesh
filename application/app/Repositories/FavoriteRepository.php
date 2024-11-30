@@ -9,12 +9,10 @@ use Illuminate\Support\Facades\Auth;
 class FavoriteRepository
 {
 
-    protected $repository;
-    protected $paginationService;
+    protected PaginationService $paginationService;
 
-    public function __construct(FavoriteRepository $repository, PaginationService $paginationService)
+    public function __construct(PaginationService $paginationService)
     {
-        $this->repository = $repository;
         $this->paginationService = $paginationService;
     }
 
@@ -33,15 +31,10 @@ class FavoriteRepository
             ->delete();
     }
 
-    public function getFavoritesQuery()
+    public function getFavorites(int $limit, ?string $cursor): array
     {
-        return Favorite::where('user_id', Auth::id());
-    }
+        $query = Favorite::where('user_id', Auth::id());
 
-    public function getFavoritesWithPagination(int $limit, ?string $cursor): array
-    {
-        $query = $this->repository->getFavoritesQuery();
-
-        return $this->paginationService->paginateWithCursor($query, $limit, $cursor, 'id', $query->count());
+        return $this->paginationService->paginateWithCursor($query, $limit, $cursor, 'created_at', $query->count());
     }
 }

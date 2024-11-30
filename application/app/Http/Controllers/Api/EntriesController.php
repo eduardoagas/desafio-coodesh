@@ -21,6 +21,6 @@ class EntriesController extends Controller
     {
         $data = $this->entriesService->getWords($request->validated());
 
-        return response()->json($data);
+        return response()->json([$data], 200);
     }
 }

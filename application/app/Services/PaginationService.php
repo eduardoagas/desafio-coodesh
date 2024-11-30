@@ -17,7 +17,6 @@ class PaginationService
      */
     public function paginateWithCursor($query, int $limit, ?string $cursor = null, string $cursorField = 'id', ?int $totalDocs = null): array
     {
-
         // Se houver um cursor, aplica o filtro baseado no field.
         if ($cursor) {
             $decodedCursor = json_decode(base64_decode($cursor), true);
@@ -25,7 +24,7 @@ class PaginationService
         }
 
         // Executa a consulta e limita a quantidade de registros.
-        $entries = $query->orderBy($cursorField)->take($limit + 1)->get();
+        $entries = $query->orderBy('id')->take($limit + 1)->get();
 
         // Se houver mais resultados que o limite,  definir se há próxima página.
         $results = $entries->slice(0, $limit);

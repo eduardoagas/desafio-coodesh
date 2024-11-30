@@ -25,9 +25,9 @@ class DictionaryController extends Controller
                 'word' => $entry->word,
                 'description' => 'A beautiful word',
                 //'description' => $entry->description, 
-            ]);
+            ], 200);
         }
 
-        return response()->json(['message' => 'Word not found'], 404);
+        return response()->json(['message' => 'Word not found'], 400);
     }
 }
