@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Middleware\ForceJsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Middleware\ForceJsonResponse;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -33,9 +34,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
     $exceptions->renderable(function (ValidationException $e) {
         return response()->json([
-            'message' => 'Erro de validação.',
-            'errors' => $e->errors(),
-        ], 422);
+            'message' => 'Erro de validacao',
+            //'errors' => $e->errors(),
+        ], 400);
     });
         /*$exceptions->render(function (Throwable $e) {
         /*if ( $e instanceof AccessDeniedHttpException ) {
