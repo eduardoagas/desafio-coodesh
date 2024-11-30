@@ -1,0 +1,61 @@
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: docker/php/Dockerfile
+    container_name: dictcod-app
+    restart: always
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ./application:/var/www/application
+      - ./composer-cache:/composer/cache 
+    environment:
+      - COMPOSER_HOME=/composer
+      - COMPOSER_ALLOW_SUPERUSER=1
+      - COMPOSER_CACHE_DIR=/composer/cache
+      - APP_ENV=local
+      - APP_KEY=base64:Os+S4/lgN+xycNSCa94DijpdSfLh5IprDB1Db+nkpL0=
+    depends_on:
+      - db
+      - redis
+
+  nginx:
+    image: nginx:1.25.1-alpine-slim
+    container_name: dictcod-nginx
+    restart: always
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./application:/var/www/application
+      - ./docker/nginx:/etc/nginx/conf.d
+
+  redis:
+    build:
+      context: ./
+      dockerfile: docker/redis/Dockerfile
+    container_name: dictcod-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis:/data
+  db:
+    build:
+      context: ./
+      dockerfile: docker/db/Dockerfile
+    container_name: dictcod-db
+    restart: always
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+
+volumes:
+  redis:
+  db:
