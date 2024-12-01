@@ -21,4 +21,14 @@ class EntriesService
 
         return $this->entriesRepository->paginateWithCursor($search, $cursor, $limit, 'id', $limit);
     }
+
+    public function getWordInfoAndRegisterHistory(string $word)
+    {
+        return $this->entriesRepository->getWordInfoAndRegisterHistory($word);
+    }
+
+    public function registerHistory(string $word)
+    {
+        return $this->entriesRepository->registerHistory($word);
+    }
 }

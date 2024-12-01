@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Models\WordHistory;
 use App\Models\DictionaryEntry;
 use App\Services\PaginationService;
+use Illuminate\Support\Facades\Auth;
 
 class EntriesRepository
 {
@@ -25,5 +27,28 @@ class EntriesRepository
         $totalDocs = DictionaryEntry::count();
 
         return $this->paginationService->paginateWithCursor($query, $limit, $cursor, 'id', $totalDocs);
+    }
+
+    public function getWordInfoAndRegisterHistory(string $word)
+    {
+        // Encontrar a palavra no dicionário
+        $entry = DictionaryEntry::where('word', $word)->first();
+
+        if ($entry) {
+            $this->registerHistory($entry->word);
+        }
+
+        return $entry;
+    }
+
+    public function registerHistory(string $word)
+    {
+
+        // Registrar o histórico de acesso
+        WordHistory::create([
+            'user_id' => Auth::id(),
+            'word' => $word,
+            'accessed_at' => now(),
+        ]);
     }
 }

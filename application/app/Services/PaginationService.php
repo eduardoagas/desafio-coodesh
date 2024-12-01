@@ -24,15 +24,53 @@ class PaginationService
         }
 
         // Executa a consulta e limita a quantidade de registros.
-        $entries = $query->orderBy('id')->take($limit + 1)->get();
+        $queries = $query->orderBy($cursorField)->take($limit + 1)->get();
 
         // Se houver mais resultados que o limite,  definir se há próxima página.
-        $results = $entries->slice(0, $limit);
-        $hasNext = $entries->count() > $limit;
+        $results = $queries->slice(0, $limit);
+        $hasNext = $queries->count() > $limit;
 
         // Cria o próximo cursor, se necessário.
         $nextCursor = $hasNext ? base64_encode(json_encode([$cursorField => $results->last()->$cursorField])) : null;
 
+        // Formatar os resultados com base no cursorField
+        if ($cursorField === 'accessed_at') {
+            // Retornar o formato customizado
+            return [
+                [
+                    'results' => $results->map(function ($query) {
+                        return [
+                            'word' => $query->word,
+                            'added' => $query->accessed_at,
+                        ];
+                    })->toArray(),
+                    'totalDocs' => $totalDocs,
+                    'next' => $nextCursor,
+                    'hasNext' => $hasNext,
+                    'hasPrev' => $cursor !== null,
+                ],
+            ];
+        }
+
+        if ($cursorField === 'created_at') {
+            // Retornar o formato customizado
+            return [
+                [
+                    'results' => $results->map(function ($query) {
+                        return [
+                            'word' => $query->word,
+                            'added' => $query->created_at,
+                        ];
+                    })->toArray(),
+                    'totalDocs' => $totalDocs,
+                    'next' => $nextCursor,
+                    'hasNext' => $hasNext,
+                    'hasPrev' => $cursor !== null,
+                ],
+            ];
+        }
+
+        // Retornar o formato padrão
         return [
             'results' => $results->pluck('word')->toArray(),
             'totalDocs' => $totalDocs,

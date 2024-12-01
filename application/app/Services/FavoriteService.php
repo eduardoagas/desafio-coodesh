@@ -13,6 +13,7 @@ class FavoriteService
         $this->repository = $repository;
     }
 
+    
     public function addFavorite(string $word): bool
     {
         return $this->repository->addFavorite($word);
@@ -23,6 +24,7 @@ class FavoriteService
         return $this->repository->removeFavorite($word) > 0;
     }
 
+    
     public function getFavorites(array $params): array
     {
         $cursor = $params['cursor'] ?? null;

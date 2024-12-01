@@ -225,6 +225,131 @@
                 }
             }
         },
+        "/entries/en": {
+            "get": {
+                "tags": [
+                    "Entries"
+                ],
+                "summary": "Buscar palavras no dicionário",
+                "description": "Retorna uma lista de palavras do dicionário com base em um critério de busca, utilizando paginação com cursores.",
+                "operationId": "7f2d08b5045cae97e68d04cc33d26aa1",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Termo de busca para filtrar palavras do dicionário.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "fire"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Número máximo de palavras a serem retornadas. Padrão é 10.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 4
+                        }
+                    },
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "description": "Cursor para paginação. Usado para navegar entre as páginas de resultados.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": ""
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de palavras encontradas.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "word": {
+                                                        "type": "string",
+                                                        "example": "fire"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "totalDocs": {
+                                            "type": "integer",
+                                            "example": 20
+                                        },
+                                        "previous": {
+                                            "type": "string",
+                                            "example": "eyIkb2lkIjoiNTgwZmQxNmjJkOGI5In0"
+                                        },
+                                        "next": {
+                                            "type": "string",
+                                            "example": "eyIkb2lkIjoiNTgwZmQxNm1NjJkOGI4In0"
+                                        },
+                                        "hasNext": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "hasPrev": {
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro de validação dos parâmetros de busca.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Bad Request"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Erro de autenticação, usuário não está logado.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Please, sign in first!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/entries/en/{entry}": {
             "get": {
                 "tags": [
@@ -232,7 +357,7 @@
                 ],
                 "summary": "Obter informações sobre uma palavra",
                 "description": "Busca informações sobre a palavra fornecida.",
-                "operationId": "ad130f4eaa4d70734eecbf942ed0e969",
+                "operationId": "003766118cea8bacc5a09af663b89eba",
                 "parameters": [
                     {
                         "name": "entry",
@@ -294,6 +419,102 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Word not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/entries/en/{entry}/favorite": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Adicionar palavra aos favoritos",
+                "description": "Adiciona uma palavra aos favoritos do usuário.",
+                "operationId": "be9ab0d43389162e26d459e66d780647",
+                "parameters": [
+                    {
+                        "name": "entry",
+                        "in": "path",
+                        "description": "A palavra que será adicionada aos favoritos.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "fire"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Palavra adicionada aos favoritos com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro ao adicionar palavra aos favoritos.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erro ao adicionar favorito."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/entries/en/{entry}/unfavorite": {
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Remover palavra dos favoritos",
+                "description": "Remove uma palavra dos favoritos do usuário.",
+                "operationId": "84b1f50af1bb18cdb53dd40afe855a7d",
+                "parameters": [
+                    {
+                        "name": "entry",
+                        "in": "path",
+                        "description": "A palavra que será removida dos favoritos.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "fire"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Palavra removida dos favoritos com sucesso."
+                    },
+                    "400": {
+                        "description": "Erro ao remover palavra dos favoritos.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erro ao remover favorito."
                                         }
                                     },
                                     "type": "object"
@@ -395,7 +616,17 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "example": "eyJpZCI6MTIzfQ=="
+                            "example": ""
+                        }
+                    },
+                    {
+                        "name": "cursorField",
+                        "in": "query",
+                        "description": "Campo para determinar o cursor. Use 'accessed_at' para retornar palavras com datas de visualização.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "accessed_at"
                         }
                     }
                 ],
@@ -405,48 +636,154 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "results": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "word": {
-                                                        "type": "string",
-                                                        "example": "fire"
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "results": {
+                                                "type": "array",
+                                                "items": {
+                                                    "properties": {
+                                                        "word": {
+                                                            "type": "string",
+                                                            "example": "fire"
+                                                        },
+                                                        "added": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2024-12-01T15:30:00Z"
+                                                        }
                                                     },
-                                                    "viewed_at": {
-                                                        "type": "string",
-                                                        "format": "date-time",
-                                                        "example": "2024-12-01T15:30:00Z"
-                                                    }
-                                                },
-                                                "type": "object"
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "totalDocs": {
+                                                "type": "integer",
+                                                "example": 50
+                                            },
+                                            "next": {
+                                                "type": "string",
+                                                "example": "eyJpZCI6MTIzfQ=="
+                                            },
+                                            "hasNext": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "hasPrev": {
+                                                "type": "boolean",
+                                                "example": false
                                             }
                                         },
-                                        "totalDocs": {
-                                            "type": "integer",
-                                            "example": 50
-                                        },
-                                        "next": {
-                                            "type": "string",
-                                            "example": "eyJpZCI6MTIzfQ=="
-                                        },
-                                        "hasNext": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "hasPrev": {
-                                            "type": "boolean",
-                                            "example": false
-                                        }
-                                    },
-                                    "type": "object"
+                                        "type": "object"
+                                    }
                                 }
                             }
                         }
                     },
                     "400": {
                         "description": "Erro de autorização.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Please, sign in first!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/me/favorites": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Obter lista de palavras favoritas",
+                "description": "Retorna a lista de palavras que o usuário marcou como favoritas.",
+                "operationId": "1998aea690ad735ef9e78b4ffde8317a",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Número máximo de registros a serem retornados. Padrão é 10.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    },
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "description": "Código para paginação baseada em cursores.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "eyJpZCI6MTIzfQ=="
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de palavras favoritas.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "results": {
+                                                "type": "array",
+                                                "items": {
+                                                    "properties": {
+                                                        "word": {
+                                                            "type": "string",
+                                                            "example": "fire"
+                                                        },
+                                                        "added": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2024-12-01T15:30:00Z"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "totalDocs": {
+                                                "type": "integer",
+                                                "example": 25
+                                            },
+                                            "next": {
+                                                "type": "string",
+                                                "example": "eyJpZCI6MTIzfQ=="
+                                            },
+                                            "hasNext": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "hasPrev": {
+                                                "type": "boolean",
+                                                "example": false
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro de autorização ou entrada inválida.",
                         "content": {
                             "application/json": {
                                 "schema": {

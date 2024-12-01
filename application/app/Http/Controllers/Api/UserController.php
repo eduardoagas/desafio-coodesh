@@ -5,17 +5,21 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use Illuminate\Http\Response;
+use OpenApi\Annotations as OA;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use OpenApi\Annotations as OA;
+use App\Http\Requests\FavoritesRequest;
+use App\Services\FavoriteService;
 
 class UserController extends Controller
 {
     protected $userService;
+    protected  $favoriteService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, FavoriteService $favoriteService)
     {
         $this->userService = $userService;
+        $this->favoriteService = $favoriteService;
     }
 
     /**
@@ -76,23 +80,33 @@ class UserController extends Controller
      *         in="query",
      *         description="Código para paginação baseada em cursores.",
      *         required=false,
-     *         @OA\Schema(type="string", example="eyJpZCI6MTIzfQ==")
+     *         @OA\Schema(type="string", example="")
+     *     ),
+     *     @OA\Parameter(
+     *         name="cursorField",
+     *         in="query",
+     *         description="Campo para determinar o cursor. Use 'accessed_at' para retornar palavras com datas de visualização.",
+     *         required=false,
+     *         @OA\Schema(type="string", example="accessed_at")
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Lista de palavras do histórico.",
      *         @OA\JsonContent(
-     *             @OA\Property(property="results", type="array", @OA\Items(
-     *                 @OA\Property(property="word", type="string", example="fire"),
-     *                 @OA\Property(property="viewed_at", type="string", format="date-time", example="2024-12-01T15:30:00Z")
-     *             )),
-     *             @OA\Property(property="totalDocs", type="integer", example=50),
-     *             @OA\Property(property="next", type="string", example="eyJpZCI6MTIzfQ=="),
-     *             @OA\Property(property="hasNext", type="boolean", example=true),
-     *             @OA\Property(property="hasPrev", type="boolean", example=false)
+     *             type="array",
+     *             @OA\Items(
+     *                 @OA\Property(property="results", type="array", @OA\Items(
+     *                     @OA\Property(property="word", type="string", example="fire"),
+     *                     @OA\Property(property="added", type="string", format="date-time", example="2024-12-01T15:30:00Z")
+     *                 )),
+     *                 @OA\Property(property="totalDocs", type="integer", example=50),
+     *                 @OA\Property(property="next", type="string", example="eyJpZCI6MTIzfQ=="),
+     *                 @OA\Property(property="hasNext", type="boolean", example=true),
+     *                 @OA\Property(property="hasPrev", type="boolean", example=false)
+     *             )
      *         )
      *     ),
-     *      @OA\Response(
+     *     @OA\Response(
      *         response=400,
      *         description="Erro de autorização.",
      *         @OA\JsonContent(
@@ -108,6 +122,61 @@ class UserController extends Controller
         $cursor = $request->query('cursor');
 
         $data = $this->userService->getUserWordHistory(Auth::id(), $limit, $cursor);
+
+        return response()->json([$data], 200);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/user/me/favorites",
+     *     summary="Obter lista de palavras favoritas",
+     *     description="Retorna a lista de palavras que o usuário marcou como favoritas.",
+     *     tags={"User"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="limit",
+     *         in="query",
+     *         description="Número máximo de registros a serem retornados. Padrão é 10.",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=10)
+     *     ),
+     *     @OA\Parameter(
+     *         name="cursor",
+     *         in="query",
+     *         description="Código para paginação baseada em cursores.",
+     *         required=false,
+     *         @OA\Schema(type="string", example="")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de palavras favoritas.",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(
+     *                 @OA\Property(property="results", type="array", @OA\Items(
+     *                     @OA\Property(property="word", type="string", example="fire"),
+     *                     @OA\Property(property="added", type="string", format="date-time", example="2024-12-01T15:30:00Z")
+     *                 )),
+     *                 @OA\Property(property="totalDocs", type="integer", example=25),
+     *                 @OA\Property(property="next", type="string", example="eyJpZCI6MTIzfQ=="),
+     *                 @OA\Property(property="hasNext", type="boolean", example=true),
+     *                 @OA\Property(property="hasPrev", type="boolean", example=false)
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Erro de autorização ou entrada inválida.",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Please, sign in first!")
+     *         )
+     *     )
+     * )
+     */
+    public function getFavorites(FavoritesRequest $request)
+    {
+        $data = $this->favoriteService->getFavorites($request->validated());
 
         return response()->json([$data], 200);
     }
