@@ -1,15 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ApiController;
 
-Route::get('/', function () {
-    return response()->json([
-        'message' => 'Fullstack Challenge 🏅 - Dictionary'
-    ], 200);
-});
+Route::get('/', [ApiController::class, "hello"]);
 
-Route::get('/pleasesignin', function () {
-    return response()->json([
-        'message' => 'Please, sign in first!'
-    ], 200);
-})->name('login');
+Route::get('/pleasesignin', [ApiController::class, "pleasesignin"])->name('login');
