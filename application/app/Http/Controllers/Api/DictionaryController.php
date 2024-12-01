@@ -19,6 +19,49 @@ class DictionaryController extends Controller
         $this->wordsApiService = $wordsApiService;
     }
 
+    /**
+     * @OA\Get(
+     *     path="/entries/en/{entry}",
+     *     summary="Obter informações sobre uma palavra",
+     *     description="Busca informações sobre a palavra fornecida.",
+     *     tags={"Entries"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="entry",
+     *         in="path",
+     *         required=true,
+     *         description="A palavra a ser pesquisada",
+     *         @OA\Schema(type="string", example="example")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Informações da palavra retornadas com sucesso, incluindo status de cache e tempo de resposta",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="word", type="string", example="fogo"),
+     *             @OA\Property(property="description", type="string", example="Diversas informações sobre a palavra 'fogo'.")
+     *         ),
+     *         @OA\Header(
+     *             header="x-cache",
+     *             description="Indica se a resposta foi do cache (HIT) ou precisa ser buscada (MISS)",
+     *             @OA\Schema(type="string", enum={"HIT", "MISS"})
+     *         ),
+     *         @OA\Header(
+     *             header="x-response-time",
+     *             description="O tempo de resposta da requisição em milissegundos",
+     *             @OA\Schema(type="integer", example=150)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Erro ao processar a palavra, como palavra não encontrada ou erro na requisição externa",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Word not found")
+     *         )
+     *     )
+     * )
+     */
     public function showWordInfo(Request $request, string $word)
     {
         $startTime = microtime(true); // Inicia a contagem do tempo
@@ -55,10 +98,11 @@ class DictionaryController extends Controller
         $responseTime = round((microtime(true) - $startTime) * 1000); // Milissegundos
 
         if (isset($entry)) {
-            return response()->json(['word' => $word,
+            return response()->json([
+                'word' => $word,
                 'description' => $response['results'] ?? 'A beautiful word',
             ], 200)->header('x-cache', $cacheStatus)
-            ->header('x-response-time', $responseTime);;
+                ->header('x-response-time', $responseTime);;
         }
 
         return response()->json(['message' => 'Word not found'], 400);

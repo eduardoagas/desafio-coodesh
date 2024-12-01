@@ -108,8 +108,8 @@ return [
              * @link https://zircote.github.io/swagger-php/reference/processors.html
              */
             'default_processors_configuration' => [
-            /** Example */
-            /**
+                /** Example */
+                /**
              * 'operationId.hash' => true,
              * 'pathFilter' => [
              * 'tags' => [
@@ -164,12 +164,19 @@ return [
              */
             'open_api_spec_version' => env('L5_SWAGGER_OPEN_API_SPEC_VERSION', \L5Swagger\Generator::OPEN_API_DEFAULT_SPEC_VERSION),
         ],
-
         /*
          * API security definitions. Will be generated into documentation file.
         */
         'securityDefinitions' => [
             'securitySchemes' => [
+                'bearerAuth' => [
+                    'type' => 'apiKey',
+                    'scheme' => 'bearer',
+                    'in' => 'header',
+                    'bearerFormat' => 'JWT',
+                    'name' => 'Authorization',
+                    'description' => 'Bearer token for authentication',
+                ],
                 /*
                  * Examples of Security schemes
                  */
@@ -228,8 +235,7 @@ return [
                     ],
 
                     'passport' => []
-                    */
-                ],
+                    */],
             ],
         ],
 

@@ -6,6 +6,309 @@
         "version": "1.0"
     },
     "paths": {
+        "/": {
+            "get": {
+                "tags": [
+                    "Miscellaneous"
+                ],
+                "summary": "Endpoint de Boas-vindas",
+                "description": "Retorna uma mensagem de boas-vindas para verificar se a API está funcionando corretamente.",
+                "operationId": "08b4ee099bdc797a5c83ebb2f4cd255f",
+                "responses": {
+                    "200": {
+                        "description": "Mensagem de boas-vindas retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Fullstack Challenge 🏅 - Dictionary"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pleasesignin": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Mensagem de solicitação de login.",
+                "description": "Retorna uma mensagem indicando que o usuário precisa realizar o login antes de continuar.",
+                "operationId": "6d50a09c159c0d1d287971347fbe7457",
+                "responses": {
+                    "400": {
+                        "description": "Usuário não autenticado, solicita login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Please, sign in first!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signup": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Registrar um novo usuário",
+                "description": "Cria um novo usuário e retorna os dados do usuário junto com o token de autenticação.",
+                "operationId": "67fd37db7cecd428148771f4e12fb15a",
+                "requestBody": {
+                    "description": "Dados para criar um novo usuário",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "João da Silva"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "joao@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "senha123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "João da Silva"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "Bearer xxxxxxx.token.here"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro na validação dos dados ou falha ao criar o usuário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erro de validação."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signin": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Autenticar um usuário existente",
+                "description": "Realiza o login de um usuário, validando suas credenciais e retornando o token de autenticação.",
+                "operationId": "3b511fa8d20576f762b94d044fe91438",
+                "requestBody": {
+                    "description": "Dados para realizar o login do usuário",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "joao@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "senha123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login bem-sucedido, retorna os dados do usuário e o token de autenticação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "João da Silva"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "Bearer xxxxxxx.token.here"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas, login falhou",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erro de validação."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/entries/en/{entry}": {
+            "get": {
+                "tags": [
+                    "Entries"
+                ],
+                "summary": "Obter informações sobre uma palavra",
+                "description": "Busca informações sobre a palavra fornecida.",
+                "operationId": "ad130f4eaa4d70734eecbf942ed0e969",
+                "parameters": [
+                    {
+                        "name": "entry",
+                        "in": "path",
+                        "description": "A palavra a ser pesquisada",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "example"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Informações da palavra retornadas com sucesso, incluindo status de cache e tempo de resposta",
+                        "headers": {
+                            "x-cache": {
+                                "description": "Indica se a resposta foi do cache (HIT) ou precisa ser buscada (MISS)",
+                                "schema": {
+                                    "type": "string",
+                                    "enum": [
+                                        "HIT",
+                                        "MISS"
+                                    ]
+                                }
+                            },
+                            "x-response-time": {
+                                "description": "O tempo de resposta da requisição em milissegundos",
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 150
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "word": {
+                                            "type": "string",
+                                            "example": "fogo"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Diversas informações sobre a palavra 'fogo'."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro ao processar a palavra, como palavra não encontrada ou erro na requisição externa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Word not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/user/me": {
             "get": {
                 "tags": [
@@ -41,8 +344,29 @@
                                 }
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Erro de autorização.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Please, sign in first!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/user/me/history": {
@@ -120,15 +444,60 @@
                                 }
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Erro de autorização.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Please, sign in first!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },
     "tags": [
         {
+            "name": "Miscellaneous",
+            "description": "Miscellaneous"
+        },
+        {
+            "name": "Auth",
+            "description": "Auth"
+        },
+        {
+            "name": "Entries",
+            "description": "Entries"
+        },
+        {
             "name": "User",
             "description": "User"
         }
-    ]
+    ],
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "apiKey",
+                "scheme": "bearer",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "name": "Authorization",
+                "description": "Bearer token for authentication"
+            }
+        }
+    }
 }

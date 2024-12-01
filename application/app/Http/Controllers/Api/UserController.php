@@ -24,6 +24,7 @@ class UserController extends Controller
      *      summary="Obter perfil.",
      *      description="Retorna as informações do usuário.",
      *      tags={"User"},
+     *      security={{"bearerAuth": {}}},
      *      @OA\Response(
      *         response=200,
      *         description="Successful response",
@@ -33,13 +34,13 @@ class UserController extends Controller
      *             @OA\Property(property="name", type="string", example="Pedro Silva", description="Nome do usuário."),
      *             @OA\Property(property="email", type="string", example="pedrosilva@example.com", description="O endereço de email do usuário.")
      *         )
-     *     )
+     *     ),
      *      @OA\Response(
-     *         response=401,
-     *         description="Unauthorized",
+     *         response=400,
+     *         description="Erro de autorização.",
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *             @OA\Property(property="message", type="string", example="Please, sign in first!")
      *         )
      *     )
      * )
@@ -62,6 +63,7 @@ class UserController extends Controller
      *     summary="Obter histórico de palavras visitadas",
      *     description="Retorna a lista de palavras que o usuário já visualizou no dicionário.",
      *     tags={"User"},
+     *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="limit",
      *         in="query",
@@ -91,11 +93,11 @@ class UserController extends Controller
      *         )
      *     ),
      *      @OA\Response(
-     *         response=401,
-     *         description="Unauthorized",
+     *         response=400,
+     *         description="Erro de autorização.",
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *             @OA\Property(property="message", type="string", example="Please, sign in first!")
      *         )
      *     )
      * )
