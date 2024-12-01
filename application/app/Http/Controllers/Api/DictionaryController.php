@@ -32,6 +32,7 @@ class DictionaryController extends Controller
             $response = $cachedResponse;
             $cacheStatus = 'HIT';
             $this->dictionaryService->registerHistory($word);
+            $entry = true;
         } else {
             // Se não estiver no cache, faz a requisição para a API externa
             // Buscar as informações da palavra e registrar o histórico
@@ -53,9 +54,8 @@ class DictionaryController extends Controller
         // Registra o tempo de resposta
         $responseTime = round((microtime(true) - $startTime) * 1000); // Milissegundos
 
-        if ($entry) {
-            return response()->json([
-                'word' => $entry->word,
+        if (isset($entry)) {
+            return response()->json(['word' => $word,
                 'description' => $response['results'] ?? 'A beautiful word',
             ], 200)->header('x-cache', $cacheStatus)
             ->header('x-response-time', $responseTime);;
