@@ -17,4 +17,9 @@ class DictionaryService
     {
         return $this->repository->getWordInfoAndRegisterHistory($word);
     }
+
+    public function registerHistory(string $word)
+    {
+        return $this->repository->registerHistory($word);
+    }
 }
