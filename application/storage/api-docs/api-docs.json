@@ -8,7 +8,10 @@
     "paths": {
         "/user/me": {
             "get": {
-                "summary": "Recuperar perfil.",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Obter perfil.",
                 "description": "Retorna as informações do usuário.",
                 "operationId": "421f19323457d46c5f90d60e67b02884",
                 "responses": {
@@ -19,35 +22,98 @@
                                 "schema": {
                                     "properties": {
                                         "id": {
-                                            "description": "The user's ID",
+                                            "description": "O ID do usuário.",
                                             "type": "integer",
                                             "example": 1
                                         },
                                         "name": {
-                                            "description": "The user's name",
+                                            "description": "Nome do usuário.",
                                             "type": "string",
-                                            "example": "John Doe"
+                                            "example": "Pedro Silva"
                                         },
                                         "email": {
-                                            "description": "The user's email address",
+                                            "description": "O endereço de email do usuário.",
                                             "type": "string",
-                                            "example": "johndoe@example.com"
+                                            "example": "pedrosilva@example.com"
                                         }
                                     },
                                     "type": "object"
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/user/me/history": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Obter histórico de palavras visitadas",
+                "description": "Retorna a lista de palavras que o usuário já visualizou no dicionário.",
+                "operationId": "51af282c4388a19690bf544533d0a2bd",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Número máximo de registros a serem retornados. Padrão é 10.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "description": "Código para paginação baseada em cursores.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "eyJpZCI6MTIzfQ=="
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de palavras do histórico.",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "message": {
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "word": {
+                                                        "type": "string",
+                                                        "example": "fire"
+                                                    },
+                                                    "viewed_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2024-12-01T15:30:00Z"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "totalDocs": {
+                                            "type": "integer",
+                                            "example": 50
+                                        },
+                                        "next": {
                                             "type": "string",
-                                            "example": "Unauthenticated"
+                                            "example": "eyJpZCI6MTIzfQ=="
+                                        },
+                                        "hasNext": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "hasPrev": {
+                                            "type": "boolean",
+                                            "example": false
                                         }
                                     },
                                     "type": "object"
@@ -58,5 +124,11 @@
                 }
             }
         }
-    }
+    },
+    "tags": [
+        {
+            "name": "User",
+            "description": "User"
+        }
+    ]
 }

@@ -34,6 +34,14 @@ class UserController extends Controller
      *             @OA\Property(property="email", type="string", example="pedrosilva@example.com", description="O endereço de email do usuário.")
      *         )
      *     )
+     *      @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *         )
+     *     )
      * )
      */
     public function getProfile(Request $request)
@@ -82,6 +90,14 @@ class UserController extends Controller
      *             @OA\Property(property="hasPrev", type="boolean", example=false)
      *         )
      *     ),
+     *      @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *         )
+     *     )
      * )
      */
     public function getHistory(Request $request)
