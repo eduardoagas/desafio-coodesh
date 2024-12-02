@@ -84,12 +84,12 @@
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "João da Silva"
+                                        "example": "Carlos Silva"
                                     },
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "joao@example.com"
+                                        "example": "carlossilva@example.com"
                                     },
                                     "password": {
                                         "type": "string",
@@ -115,7 +115,7 @@
                                         },
                                         "name": {
                                             "type": "string",
-                                            "example": "João da Silva"
+                                            "example": "Carlos Silva"
                                         },
                                         "token": {
                                             "type": "string",
@@ -168,7 +168,7 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "joao@example.com"
+                                        "example": "carlossilva@example.com"
                                     },
                                     "password": {
                                         "type": "string",
@@ -194,7 +194,7 @@
                                         },
                                         "name": {
                                             "type": "string",
-                                            "example": "João da Silva"
+                                            "example": "Carlos Silva"
                                         },
                                         "token": {
                                             "type": "string",

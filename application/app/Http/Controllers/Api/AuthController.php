@@ -33,8 +33,8 @@ class AuthController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             required={"name", "email", "password"},
-     *             @OA\Property(property="name", type="string", example="João da Silva"),
-     *             @OA\Property(property="email", type="string", format="email", example="joao@example.com"),
+     *             @OA\Property(property="name", type="string", example="Carlos Silva"),
+     *             @OA\Property(property="email", type="string", format="email", example="carlossilva@example.com"),
      *             @OA\Property(property="password", type="string", format="password", example="senha123")
      *         )
      *     ),
@@ -44,7 +44,7 @@ class AuthController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="id", type="integer", example=1),
-     *             @OA\Property(property="name", type="string", example="João da Silva"),
+     *             @OA\Property(property="name", type="string", example="Carlos Silva"),
      *             @OA\Property(property="token", type="string", example="Bearer xxxxxxx.token.here")
      *         )
      *     ),
@@ -84,7 +84,7 @@ class AuthController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             required={"email", "password"},
-     *             @OA\Property(property="email", type="string", format="email", example="joao@example.com"),
+     *             @OA\Property(property="email", type="string", format="email", example="carlossilva@example.com"),
      *             @OA\Property(property="password", type="string", format="password", example="senha123")
      *         )
      *     ),
@@ -94,7 +94,7 @@ class AuthController extends Controller
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="id", type="integer", example=1),
-     *             @OA\Property(property="name", type="string", example="João da Silva"),
+     *             @OA\Property(property="name", type="string", example="Carlos Silva"),
      *             @OA\Property(property="token", type="string", example="Bearer xxxxxxx.token.here")
      *         )
      *     ),
