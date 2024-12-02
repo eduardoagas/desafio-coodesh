@@ -4,3 +4,4 @@ composer-cache
 application/notenvtesting
 application/nenvtesting
 application/tests/Feature/UserProfileTest.php
+instrucoes.txt
