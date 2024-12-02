@@ -729,7 +729,7 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "example": "eyJpZCI6MTIzfQ=="
+                            "example": ""
                         }
                     }
                 ],
